@@ -1,56 +1,99 @@
-A simple Airline Management System built with PHP + MySQL, allowing users to manage airlines, airplanes, airports, and flights. This project demonstrates fundamental CRUD operations, relational database design, and PHP backend programming.
+# ✈️ Airline Management System
+
+> A simple Airline Management System built with PHP & MySQL, providing CRUD operations for airlines, airplanes, airports, and flights.
+
+---
+
+## 🧩 Features
+
+- ✈️ **Airline Management**  
+  Add, modify, and view airline information.
+
+- 🛫 **Flight Management**  
+  Create, update, filter, and search flights. View available seats.
+
+- 🛩️ **Airplane & Type Management**  
+  Manage airplanes, their types, associated airlines, and seating capacity.
+
+- 🏙️ **Airport Management**  
+  Maintain airport names, locations, and supported airplane types.
+
+- 📅 **Flight Scheduling**  
+  Store and manage flight dates using the `DayForFlight` table.
+
+- 💾 **DAO (Data Access Object) Architecture**  
+  `daos.php` provides a unified interface for database operations.
+
+---
+
+## 🗄️ Database Schema
+
+**Database name:** `airlineDB`
+
+**Main tables:**
+
+| Table            | Description                                    |
+|------------------|------------------------------------------------|
+| `Airline`         | Airline code and name                           |
+| `Airplane`        | Airplane ID, year, airline, and type             |
+| `Airport`         | Airport code, name, and location                  |
+| `Type`             | Airplane type, seat count, manufacturer             |
+| `Flight`             | Flight number, departure/arrival, plane, seats       |
+| `DayForFlight`         | Mapping of flights to scheduled dates                      |
+| `handelling`                 | Which airports can handle which airplane types                   |
+
+**Key foreign relationships:**
+- `Flight.AirlineCode` → `Airline.AirlineCode`
+- `Flight.AirplaneID` → `Airplane.AirplaneID`
+- `Flight.DepartAirportCode` → `Airport.AirportCode`
+- `Airplane.TypeName` → `Type.TypeName`
+- `handelling.TypeName` → `Type.TypeName`
+- `handelling.AirportCode` → `Airport.AirportCode`
+
+---
+
+## ⚙️ Setup & Installation
+
+### 📌 Step 1 — Import the Database
+1. Open phpMyAdmin or MySQL CLI.
+2. Run:
+   ```sql
+   SOURCE airlineDB.sql;
+3. This will create all tables and insert sample data.
+
+### 📌 Step 2 — Deploy PHP Files
+ 1. Copy all `.php` files into your local server directory
+    For example:
+      - XAMPP: htdocs/airline/
+      - WAMP:  www/airline/
+ 2. Make sure the `mysqli` or `PDO` extension is enabled in your PHP environment
+### 📌 Step 3 — Configure Database Connection
+1. Open daos.php
+2. Fill in your DB connection details:
+$host = "localhost";
+$user = "root";
+$pass = "your_password";
+$dbname = "airlineDB";
+
+## 🖥️ Usage Guide
+| File          | Description                             |
+| ------------- | --------------------------------------- |
+| `airline.php` | View and manage airline information     |
+| `Flight.php`  | Flight class and entity interactions    |
+| `add.php`     | Add new flights, airplanes, or airports |
+| `modify.php`  | Modify existing records                 |
+| `filter.php`  | Search and filter flights               |
+| `seats.php`   | View available seats for a given flight |
+| `daos.php`    | Data access layer (database operations) |
+
+## 📁 Project Structure
+- `airlineDB.sql` → `# Database schema and sample data`
+- `airline.php` → `# Airline management page`
+- `Flight.php` → `# Flight class`
+- `add.php` → `# Add new records`
+- `modify.php` → `# Modify records`
+- `filter.php ` → `# Search/filter flights`
+- `seats.php ` → `# Check available seats`
+- `daos.php` → `# Database access layer`
 
 
-📁 Project Structure
-├── airlineDB.sql       # MySQL database schema and sample data
-├── airline.php          # Display and manage airline information
-├── Flight.php            # Flight entity class (PHP)
-├── add.php               # Add new records (flights, airplanes, etc.)
-├── modify.php            # Modify existing records
-├── filter.php             # Filter/search flights
-├── seats.php               # View available seats for a flight
-├── daos.php                # Data access layer (DAO)
-
-
-🗄️ Database Design
-The system uses a relational database named airlineDB.
-Main tables include:
-| Table          | Description                                       |
-| -------------- | ------------------------------------------------- |
-| `Airline`      | Stores airline codes and names                    |
-| `Airplane`     | Stores airplane info and links to airlines/types  |
-| `Airport`      | Stores airport codes, names, and locations        |
-| `Type`         | Stores airplane type, seat count, manufacturer    |
-| `Flight`       | Stores flight details (time, plane, route, seats) |
-| `DayForFlight` | Maps flights to scheduled dates                   |
-| `handelling`   | Which airports can handle which plane types       |
-
-
-⚙️ Setup Instructions
-1. Create Database
-
-Open phpMyAdmin or MySQL CLI.
-Run the script: SOURCE airlineDB.sql;
-This will create all tables and insert sample data.
-
-2. Configure PHP Environment
-Place all .php files in your web server root (e.g. htdocs for XAMPP, www for WAMP).
-Make sure mysqli or PDO extension is enabled.
-
-3. Update DB Credentials
-In daos.php, configure your database host, username, password, and database name as needed.
-
-
-🖥️ Usage
-airline.php — View or manage airline information.
-add.php — Add new flight, airplane, or airport records.
-modify.php — Edit existing records.
-filter.php — Search for flights using filters.
-seats.php — Check the available seats of a given flight.
-
-
-💡 Features
-CRUD operations on Airlines, Flights, Airplanes, Airports
-Relational database schema with foreign key constraints
-Simple and clean PHP backend structure (DAO pattern)
-Example data to test and demo immediately
