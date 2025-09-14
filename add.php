@@ -1,67 +1,52 @@
-<!DOCTYPE html>
-<html>
+<?php
+require '../util/daos.php';
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Add Flights</title>
-</head>
+$dao = new Dao();
 
-<body>
-    <img src="img/logo.png" alt="logo" width="1000" /><br />
-    <h1>Flight Query System</h1>
-    <ul>
-        <li><a href="airline.php">All Flights</a></li>
-        <li><a href="filter.php">Find Flights</a></li>
-        <li><a href="add.php">Add Flights</a></li>
-        <li><a href="seats.php">See the Seats</a></li>
-    </ul>
-    <h2>Add Flights:</h2>
-    <div>
-        <form action="action/add.php" method="post" accept-charset="utf-8">
-            <?php
-            require 'util/daos.php';
-            $dao = new Dao();
+$FlightNumber = $_POST['FlightNumber'];
+$AirlineCode = $_POST['AirlineCode'];
+$DepartAirportCode = $_POST['DepartAirportCode'];
+$ArriveAirportCode = $_POST['ArriveAirportCode'];
+$FlightDay = $_POST['FlightDay'];
+$FlightDepartActualTime = $_POST['FlightDepartActualTime'];
+$FlightDepartScheduledTime = $_POST['FlightDepartScheduledTime'];
+$FlightArrivesActualTime = $_POST['FlightArrivesActualTime'];
+$FlightArrivesScheduledTime = $_POST['FlightArrivesScheduledTime'];
+$AvailableSeats = $_POST['AvailableSeats'];
 
-            $airlineCodes = $dao->queryAirlines();
-            $airportCodes = $dao->queryAirports();
+if (!preg_match("/^[0-9][0-9]\:[0-9][0-9]\:[0-9][0-9]$/", $FlightDepartActualTime)) {
+    echo '<script type="text/javascript">alert("Ops! It seems that you have input a wrong format in FlightDepartActualTime!");window.location.href = "../add.php"</script>';
+    return;
+}
+if (!preg_match("/^[0-9][0-9]\:[0-9][0-9]\:[0-9][0-9]$/", $FlightDepartScheduledTime)) {
+    echo '<script type="text/javascript">alert("Ops! It seems that you have input a wrong format in FlightDepartScheduledTime!");window.location.href = "../add.php"</script>';
+    return;
+}
+if (!preg_match("/^[0-9][0-9]\:[0-9][0-9]\:[0-9][0-9]$/", $FlightArrivesActualTime)) {
+    echo '<script type="text/javascript">alert("Ops! It seems that you have input a wrong format in FlightArrivesActualTime!");window.location.href = "../add.php"</script>';
+    return;
+}
+if (!preg_match("/^[0-9][0-9]\:[0-9][0-9]\:[0-9][0-9]$/", $FlightArrivesScheduledTime)) {
+    echo '<script type="text/javascript">alert("Ops! It seems that you have input a wrong format in FlightArrivesScheduledTime!");window.location.href = "../add.php"</script>';
+    return;
+}
 
-            ?>
-            Flight Number: <input type="text" placeholder="" name="FlightNumber" id="FlightNumber" /><br />
-            Airline Code:
-            <select id="AirlineCode" name="AirlineCode">
-                <?php
-                foreach ($airlineCodes as $airline) {
-                    echo "<option value='$airline'>$airline</option>";
-                }
-                ?>
-            </select><br />
-            Depart Airport Code:
-            <select id="DepartAirportCode" name="DepartAirportCode">
-                <?php
-                foreach ($airportCodes as $airport) {
-                    echo "<option value='$airport'>$airport</option>";
-                }
-                ?>
-            </select><br />
-            Arrive Airport Code:
-            <select id="ArriveAirportCode" name="ArriveAirportCode">
-                <?php
-                foreach ($airportCodes as $airport) {
-                    echo "<option value='$airport'>$airport</option>";
-                }
-                ?>
-            </select><br />
-            Flight Day: <input type="text" placeholder="format:2020-01-01" name="FlightDay" id="FlightDay" /><br />
-            Flight Depart Actual Time: <input type="text" placeholder="format:10:00:00" name="FlightDepartActualTime" id="FlightDepartActualTime" /><br />
-            Flight Depart Schedule Time: <input type="text" placeholder="format:10:00:00" name="FlightDepartScheduledTime" id="FlightDepartScheduledTime" /><br />
-            Flight Arrives Actual Time: <input type="text" placeholder="format:10:00:00" name="FlightArrivesActualTime" id="FlightArrivesActualTime" /><br />
-            Flight Arrives Schedule Time: <input type="text" placeholder="format:10:00:00" name="FlightArrivesScheduledTime" id="FlightArrivesScheduledTime" /><br />
-            Available Seats: <input type="text" name="AvailableSeats" id="AvailableSeats" /><br />
-            <input type="submit" value="submit" />
-            <input type="reset" value="reset" />
-        </form>
-    </div>
-</body>
 
-</html>
+if (!preg_match("/^[0-9][0-9][0-9][0-9]\-[0-9][0-9]\-[0-9][0-9]$/", $FlightDay)) {
+    echo '<script type="text/javascript">alert("Ops! It seems that you have input a wrong format in FlightDay!");window.location.href = "../add.php"</script>';
+    return;
+}
+
+$dao->addFlight(
+    $FlightNumber,
+    $AirlineCode,
+    $DepartAirportCode,
+    $ArriveAirportCode,
+    $FlightDay,
+    $FlightDepartActualTime,
+    $FlightDepartScheduledTime,
+    $FlightArrivesActualTime,
+    $FlightArrivesScheduledTime,
+    $AvailableSeats
+);
+echo '<script type="text/javascript">alert("add successful!");window.location.href = "../airline.php"</script>';
